@@ -1,0 +1,17 @@
+[user]
+	name = Shane Iler
+	email = sriler@gmail.com
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+[http]
+	sslVerify = false
+[push]
+	default = simple
+[alias]
+	root = !pwd
+	ctags = !.git/hooks/ctags
+[init]
+	templatedir = ~/.git_template

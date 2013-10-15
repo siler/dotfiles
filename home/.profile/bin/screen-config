@@ -1,0 +1,16 @@
+#!/bin/sh
+case $1 in
+work )
+	xrandr --output HDMI1 --auto --right-of LVDS1 --output HDMI2 --auto --right-of HDMI1
+	xset s off
+	xset -dpms
+	;;
+off )
+	xrandr --output HDMI1 --off --output HDMI2 --off
+	xset s on
+	xset dpms
+	;;
+* )
+	echo 'Not a valid option, noob.'
+	;;
+esac

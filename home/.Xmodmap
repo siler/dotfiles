@@ -1,0 +1,11 @@
+clear mod4
+add mod3 = Hyper_L
+add mod4 = Super_L
+
+! For mapping capslock to a hyper key
+! clear lock
+! keycode 66 = Hyper_L
+
+! Caps lock to Escape
+clear lock
+keycode 66 = Escape

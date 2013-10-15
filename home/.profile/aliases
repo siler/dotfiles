@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+alias ack-grep='ack'
+alias ls='ls --color=auto'
+alias ll='ls -al'
+alias diff=colordiff
+
+alias root='cd $(git root)'
+
+alias bbs='ssh support.bbs.cudaops.com'
+alias bsh='ssh support.cudaops.com'
+alias ncs='ssh 10.128.1.8'
+
+alias delta='ssh 10.2.73.78'
+alias gamma='ssh 10.2.73.80'
+
+alias epsilon='ssh epsilon'
+alias zeta='ssh zeta'
+
+alias cuda-sec='sudo $HOME/.profile/bin/mount-cuda; if [ $? -eq 0 ]; then source $HOME/.zshrc; fi'
+alias screen-conf='sudo $HOME/.profile/bin/screen-config'
+
+alias print-colors='for i in {0..255} ; do printf "\x1b[38;5;${i}m ${i}"; done'
+
+alias chrome='chromium'
+alias weechat='weechat-curses'
+
+# NSS Configuration
+alias gcert='certutil -d sql:$HOME/.pki/nssdb'
+
+# This breaks shit that depends on ssh
+#alias ssh='eval $(/usr/bin/keychain --eval -Q --quiet id_rsa cuda) && ssh'

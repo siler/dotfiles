@@ -1,0 +1,13 @@
+#!/bin/sh
+gpg --quiet --decrypt --force-mdc /home/siler/.gnupg/cuda-sec.gpg | cryptsetup --key-file=- luksOpen /dev/sdb3 cuda-sec 
+if [ $? -ne 0 ]; then
+	echo 'Unable to open encrypted partition'
+	exit 1
+fi
+
+mount /dev/mapper/cuda-sec /home/siler/cuda
+
+if [ $? -ne 0 ]; then
+	echo 'Error mounting /dev/mapper/sechome'
+	exit 1
+fi
