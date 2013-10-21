@@ -42,6 +42,11 @@ Bundle 'vim-scripts/Align'
 " SQL tools
 Bundle 'vim-scripts/SQLUtilities'
 
+" JS stuff
+Bundle 'jelera/vim-javascript-syntax'
+Bundle 'pangloss/vim-javascript'
+Bundle 'kchmck/vim-coffee-script'
+
 " Syntax stuff + python additions
 Bundle 'scrooloose/syntastic'
 Bundle 'nvie/vim-flake8'
@@ -56,6 +61,9 @@ Bundle 'joonty/vdebug.git'
 " Supertab!
 Bundle 'ervandew/supertab'
 
+" Color info
+Bundle 'vim-scripts/Colortest'
+
 filetype plugin indent on
 
 " Prevent a couple of vulnerabilities
@@ -68,9 +76,19 @@ set noshowmode
 set showcmd
 
 " general tabstop settings
-set tabstop=3
+set smarttab
 set shiftwidth=3
+set tabstop=3
 set noexpandtab
+
+" Specific tabstop settings:
+augroup Indentation
+	autocmd!
+	autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 expandtab
+	autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab
+	autocmd FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
+	autocmd FileType python setlocal shiftwidth=4 softtabstop=4 expandtab textwidth=79
+augroup END
 
 " show whitespace
 set list
@@ -78,9 +96,6 @@ let &listchars = "tab:\u279e\ ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:
 
 " keep undo files in a specific location instead of littering code trees
 set undodir=~/.cache/vim
-
-" Specific tabstop settings:
-" autocmd FileType <type> setlocal tabstop=x shiftwidth=y
 
 " Color configuration
 set t_Co=256
@@ -144,11 +159,6 @@ endfunction
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cnoremap W!! %!sudo tee > /dev/null %
 
-" Common typos
-cnoremap W w
-cnoremap X x
-cnoremap Q q
-
 " Remap ctrl-space to omnicomplete
 inoremap <C-@> <C-x><C-o>
 
@@ -164,9 +174,14 @@ function! GoFormat()
 	call setpos('.', l:cursor_pos)
 endfunction
 
-augroup goformat_group
+augroup FormatGo
 	autocmd!
 	autocmd BufWritePre *.go :call GoFormat()
+augroup END
+
+augroup MakeCoffee
+	autocmd!
+	autocmd BufWritePost *.coffee silent make!
 augroup END
 
 " Window management hotkeys
@@ -215,9 +230,6 @@ nnoremap <down>  :3wincmd -<cr>
 " Close/rotate
 noremap <leader>wc :wincmd q<cr>
 noremap <leader>wr <C-W>r
-
-" Only care about php linting
-let g:syntastic_php_checkers=['php']
 
 " Ack default command
 let g:ackprg="ack -H --nocolor --nogroup --column"

@@ -24,37 +24,36 @@ mkEmptyString :: String -> String
 mkEmptyString str = ""
 
 myLayout = avoidStruts (hintedTiled ||| smartFull)
-   where
-      hintedTiled = layoutHintsWithPlacement (0.5, 0.5) (Tall 1 (3/100) (2/3))
-      smartFull = smartBorders Full
+  where
+    hintedTiled = layoutHintsWithPlacement (0.5, 0.5) (Tall 1 (3/100) (2/3))
+    smartFull = smartBorders Full
 
 myXmobarPP :: PP
 myXmobarPP = defaultPP { ppCurrent = xmobarColor sClrOrange "" . wrap "[" "]"
                        , ppHidden  = xmobarColor sClrMagenta "" . wrap " " ""
-							  , ppVisible = xmobarColor sClrMagenta "" . wrap "(" ")"
-							  , ppUrgent  = xmobarColor sClrRed ""
-							  , ppLayout  = (\_ -> [])
+                       , ppVisible = xmobarColor sClrMagenta "" . wrap "(" ")"
+                       , ppUrgent  = xmobarColor sClrRed ""
+                       , ppLayout  = (\_ -> [])
                        , ppTitle   = xmobarColor sClrGreen "" . shorten 40
-							  , ppSep     = " "
-							  , ppWsSep   = ""
-							  , ppSort    = getSortByXineramaRule
+                       , ppSep     = " "
+                       , ppWsSep   = ""
+                       , ppSort    = getSortByXineramaRule
                        }
 
 main = do
-	xmproc <- spawnPipe "/home/siler/.cabal/bin/xmobar /home/siler/.xmonad/xmobar.hs"
-	xmonad $ defaultConfig
-		{ manageHook = manageDocks <+> manageHook defaultConfig
-		, layoutHook =  myLayout
-		, logHook = dynamicLogWithPP myXmobarPP
-							{ ppOutput = hPutStrLn xmproc }
-		, terminal = "st -e tmux"
-		, modMask = mod4Mask
-		, borderWidth = myBorderWidth
-		, normalBorderColor = sClrMagenta
-		, focusedBorderColor = sClrOrange
-		}
-		`additionalKeys`
-		[ ((mod4Mask, xK_p), spawn "exe=`dmenu_run` && eval \"exec $exe\"")
-		, ((0, xK_Escape), spawn "slock")
-		, ((mod4Mask, xK_c), spawn "chromium")
-		]
+  xmproc <- spawnPipe "/home/siler/.cabal/bin/xmobar /home/siler/.xmonad/xmobar.hs"
+  xmonad $ defaultConfig
+    { manageHook = manageDocks <+> manageHook defaultConfig
+    , layoutHook =  myLayout
+    , logHook = dynamicLogWithPP myXmobarPP { ppOutput = hPutStrLn xmproc }
+    , terminal = "st -e tmux"
+    , modMask = mod4Mask
+    , borderWidth = myBorderWidth
+    , normalBorderColor = sClrMagenta
+    , focusedBorderColor = sClrOrange
+    }
+    `additionalKeys`
+    [ ((mod4Mask, xK_p), spawn "exe=`dmenu_run` && eval \"exec $exe\"")
+    , ((0, xK_Escape), spawn "slock")
+    , ((mod4Mask, xK_c), spawn "chromium")
+    ]

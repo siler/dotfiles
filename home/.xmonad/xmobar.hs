@@ -4,6 +4,7 @@ Config { font = "xft:Inconsolata:pixelsize=13:antialias=true:autohint=false"
        , position = Top
        , lowerOnStart = True
        , commands = [ Run Date "%a %b %_d %l:%M" "date" 10
+                    , Run BatteryP ["BAT0"] [] 10
                     , Run Com "conky" ["-q", "-i", "1"] "conky" 10
                     , Run StdinReader
                     ]
