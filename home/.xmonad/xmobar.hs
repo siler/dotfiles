@@ -3,13 +3,25 @@ Config { font = "xft:Inconsolata:pixelsize=13:antialias=true:autohint=false"
        , fgColor = "#ae81ff"
        , position = Top
        , lowerOnStart = True
-       , commands = [ Run Date "%a %b %_d %l:%M" "date" 10
-                    , Run BatteryP ["BAT0"] [] 10
-                    , Run Com "conky" ["-q", "-i", "1"] "conky" 10
+       , commands = [ Run Memory ["-t", "<usedratio>% (<used>M)"] 100
+                    , Run BatteryP ["BAT1"]
+                                   [ "-t", "<acstatus>"
+                                   , "--"
+                                   , "-O", "Charging: <timeleft>"
+                                   , "-o", "Discharging: <timeleft>"
+                                   , "-i", ""
+                                   , "-f", "ACAD/online"
+                                   ]
+                                   100
+                    , Run Com "cut" ["-d", "' '"
+                                    , "-f", "1", "/proc/loadavg"
+                                    ]
+                                    "loadavg" 100
+                    , Run Com "date" ["+'%m/%d %H:%M'"] "datetime" 600
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
        , allDesktops = True
-       , template = "%StdinReader% }{ %conky% "
+       , template = "%StdinReader% }{ %loadavg% : %memory% : %battery% : %datetime%"
        }

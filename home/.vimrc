@@ -257,6 +257,7 @@ let g:phpcomplete_parse_docblock_comments = 1
 "supertab configuration
 let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
 
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
 set completeopt+=longest
