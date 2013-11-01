@@ -23,5 +23,5 @@ Config { font = "xft:Inconsolata:pixelsize=13:antialias=true:autohint=false"
        , sepChar = "%"
        , alignSep = "}{"
        , allDesktops = True
-       , template = "%StdinReader% }{ %loadavg% : %memory% : %battery% : %datetime%"
+       , template = " %StdinReader% }{ %loadavg% : %memory% : %battery% : %datetime% "
        }

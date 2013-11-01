@@ -1,13 +1,20 @@
 import XMonad
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
+
+-- Docks
+import XMonad.Hooks.ManageDocks(manageDocks, avoidStruts, docksEventHook)
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Hooks.DynamicLog
+import XMonad.Util.WorkspaceCompare(getSortByXineramaRule)
+
+-- Layout
+import XMonad.Layout.NoBorders(smartBorders, noBorders)
+import XMonad.Layout.LayoutHints(layoutHintsWithPlacement)
+
+-- Hotkeys
 import XMonad.Util.EZConfig(additionalKeys)
-import XMonad.Util.WorkspaceCompare
-import XMonad.Layout.NoBorders
-import XMonad.Layout.LayoutHints
-import qualified Data.Map as M
-import System.IO
+
+
+import System.IO -- hPutStrLn
 
 myBorderWidth = 1
 
@@ -20,13 +27,9 @@ sClrMagenta    = "#ae81ff"
 sClrCyan       = "#a1efe4"
 sClrWhite      = "#f8f8f2"
 
-mkEmptyString :: String -> String
-mkEmptyString str = ""
-
-myLayout = avoidStruts (hintedTiled ||| smartFull)
+myLayout = avoidStruts $ (smartBorders hintedTiled ||| noBorders Full)
   where
     hintedTiled = layoutHintsWithPlacement (0.5, 0.5) (Tall 1 (3/100) (2/3))
-    smartFull = smartBorders Full
 
 myXmobarPP :: PP
 myXmobarPP = defaultPP { ppCurrent = xmobarColor sClrOrange "" . wrap "[" "]"
@@ -45,6 +48,7 @@ main = do
   xmonad $ defaultConfig
     { manageHook = manageDocks <+> manageHook defaultConfig
     , layoutHook =  myLayout
+    , handleEventHook = docksEventHook
     , logHook = dynamicLogWithPP myXmobarPP { ppOutput = hPutStrLn xmproc }
     , terminal = "st -e tmux"
     , modMask = mod4Mask
@@ -55,5 +59,5 @@ main = do
     `additionalKeys`
     [ ((mod4Mask, xK_p), spawn "exe=`dmenu_run` && eval \"exec $exe\"")
     , ((0, xK_Escape), spawn "slock")
-    , ((mod4Mask, xK_c), spawn "chromium")
+    , ((mod4Mask, xK_c), spawn "google-chrome-beta")
     ]

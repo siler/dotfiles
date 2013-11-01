@@ -61,9 +61,6 @@ Bundle 'joonty/vdebug.git'
 " Supertab!
 Bundle 'ervandew/supertab'
 
-" Color info
-Bundle 'vim-scripts/Colortest'
-
 filetype plugin indent on
 
 " Prevent a couple of vulnerabilities
@@ -92,7 +89,10 @@ augroup END
 
 " show whitespace
 set list
-let &listchars = "tab:\u279e\ ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+let &listchars = "tab:\u2192\ ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+
+" remove horrible split characters
+set fillchars=""
 
 " keep undo files in a specific location instead of littering code trees
 set undodir=~/.cache/vim
@@ -114,7 +114,11 @@ set viminfo='100,h
 set history=100
 
 set wildmode=list:longest,full
-set wildignore+=*/tmp/*,*.so,*.swp,*/vendor/*
+set wildignore+=*/tmp/*,*.so,*.swp,*/vendor/*,*/tests/coverage/*
+let g:ctrlp_custom_ignore = {
+			\ 'dir':  '\v[\/]\.(vendor|tests/coverage)$',
+			\ 'file': '\v\.(png|jpg|swf)$',
+			\ }
 
 " Set substitutions to always apply globally to lines
 set gdefault
@@ -166,6 +170,10 @@ inoremap <C-@> <C-x><C-o>
 nnoremap <silent> <leader>ev :edit $MYVIMRC<cr>
 nnoremap <silent> <leader>sv :source $MYVIMRC<cr>
 nnoremap <silent> <leader>es :UltiSnipsEdit<cr>
+
+" Common command mistakes
+command! W w
+command! Q q
 
 " apply gofmt to the current file silently
 function! GoFormat()
@@ -242,10 +250,10 @@ nnoremap <leader>f :CtrlPMRUFiles<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
 " Ultisnips configuraiton
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsSnippetsDir="~/.vim/snippets"
-let g:UltiSnipsSnippetDirectories=["snippets"]
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+let g:UltiSnipsSnippetsDir = "~/.vim/snippets"
+let g:UltiSnipsSnippetDirectories = ["snippets"]
 
 "SQLUtil keyword case update
 let g:sqlutil_keyword_case = '\U'
@@ -257,7 +265,22 @@ let g:phpcomplete_parse_docblock_comments = 1
 "supertab configuration
 let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
+" Set up some sweet powerline features
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+let g:vdebug_options = {
+			\ 'break_on_open' : 0,
+			\ 'continuous_mode' : 1
+			\}
 
 set completeopt+=longest

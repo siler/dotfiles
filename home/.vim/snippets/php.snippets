@@ -122,7 +122,33 @@ ${1:public} function ${2:someFunc}(${3})
 }
 endsnippet
 
-snippet class "class declaration" !b
+snippet test "test class" !b
+use `!p
+from subprocess import check_output
+from os.path import relpath, dirname, abspath, join
+snip.rv = relpath(dirname(abspath(path)), join(check_output("git rev-parse --show-toplevel", shell=True).strip(), 'tests')).replace('/','\\') + '\\' + snip.fn.split('.')[0][:-4]
+`;
+use Mockery as m;
+
+/**
+ * ${1:`!p snip.rv=snip.fn.split('.')[0]`}
+ */
+
+class $1 extends \PHPUnit_Framework_TestCase
+{
+	${2:public function setUp()
+	{
+		$3
+	}
+	}
+	public function test$4()
+	{
+		$5
+	}
+}
+endsnippet
+
+snippet class "php class" !b
 /**
  * ${1:`!p snip.rv=snip.fn.split('.')[0]`}
  */

@@ -22,11 +22,12 @@ alias screen-conf='sudo $HOME/.profile/bin/screen-config'
 
 alias print-colors='for i in {0..255} ; do printf "\x1b[38;5;${i}m ${i}"; done'
 
-alias chrome='chromium'
-alias weechat='weechat-curses'
-
 # NSS Configuration
 alias gcert='certutil -d sql:$HOME/.pki/nssdb'
 
 # This breaks shit that depends on ssh
 #alias ssh='eval $(/usr/bin/keychain --eval -Q --quiet id_rsa cuda) && ssh'
+
+alias homeshick="source $HOME/.homesick/repos/homeshick/bin/homeshick.sh"
+
+alias pdb='XDEBUG_CONFIG="idekey=siler" php -d xdebug.remote_enable=1'

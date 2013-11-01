@@ -2,5 +2,5 @@
 
 export MYSQL_PS1="\u@\h in <\d> : "
 #export LSCOLORS="Exfxcxdxbxegedabagacad"
-export LIBVIRT_DEFAULT_URI="qemu:///system"
-export CHROME_BIN="chromium"
+export CHROME_BIN="google-chrome-beta"
+export XDG_CONFIG_HOME="$HOME/.config"
