@@ -55,6 +55,9 @@ Bundle 'hynek/vim-python-pep8-indent'
 " Better PHP Complete
 Bundle 'shawncplus/phpcomplete.vim'
 
+" Better Go complete
+Bundle 'Blackrush/vim-gocode'
+
 " Debugging
 Bundle 'joonty/vdebug.git'
 
@@ -92,7 +95,7 @@ set list
 let &listchars = "tab:\u2192\ ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 
 " remove horrible split characters
-set fillchars=""
+set fillchars+=vert:\ 
 
 " keep undo files in a specific location instead of littering code trees
 set undodir=~/.cache/vim
@@ -161,7 +164,7 @@ function! FindFunc()
 endfunction
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
-cnoremap W!! %!sudo tee > /dev/null %
+cnoremap W!! w !sudo tee > /dev/null %
 
 " Remap ctrl-space to omnicomplete
 inoremap <C-@> <C-x><C-o>
@@ -175,18 +178,6 @@ nnoremap <silent> <leader>es :UltiSnipsEdit<cr>
 command! W w
 command! Q q
 
-" apply gofmt to the current file silently
-function! GoFormat()
-	let l:cursor_pos = getpos('.')
-	silent %!gofmt
-	call setpos('.', l:cursor_pos)
-endfunction
-
-augroup FormatGo
-	autocmd!
-	autocmd BufWritePre *.go :call GoFormat()
-augroup END
-
 augroup MakeCoffee
 	autocmd!
 	autocmd BufWritePost *.coffee silent make!
@@ -195,25 +186,17 @@ augroup END
 " Window management hotkeys
 function! WinMove(key)
 	let t:curwin = winnr()
-
 	execute "wincmd ".a:key
 
-	" Couldn't move, create a window
-	if (t:curwin == winnr())
-
-		" Create vertical split
-		if (match(a:key,'[jk]'))
+	if (t:curwin == winnr()) " Couldn't move, create a window
+		if (match(a:key,'[jk]')) " Create vertical split
 			wincmd v
-
-		" Create horizontal split
-		else
+		else " Create horizontal split
 			wincmd s
-
 		endif
 
 		" Move to the newly created window
 		exec "wincmd ".a:key
-
 	endif
 endfunction
 
