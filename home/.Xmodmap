@@ -1,6 +1,10 @@
 clear mod4
+
 add mod3 = Hyper_L
 add mod4 = Super_L
+
+keycode 135 = Menu
+keysym Menu = Super_R
 
 ! For mapping capslock to a hyper key
 ! clear lock

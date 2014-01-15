@@ -1,7 +1,7 @@
 #!/bin/sh
 case $1 in
 work )
-	xrandr --output HDMI1 --auto --right-of LVDS1 --output HDMI2 --auto --right-of HDMI1
+	xrandr --output HDMI1 --auto --right-of LVDS1 --output HDMI2 --auto --rotate left --right-of HDMI1
 	xset s off
 	xset -dpms
 	;;

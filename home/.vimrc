@@ -32,28 +32,24 @@ Bundle 'tpope/vim-eunuch'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-sleuth'
 
-" Ability to kill buffer without closing window
-Bundle 'vim-scripts/bufkill.vim'
+" Tig in vim
+Bundle 'int3/vim-extradite'
 
-" Alignment tool
-Bundle 'vim-scripts/Align'
-
-" SQL tools
-Bundle 'vim-scripts/SQLUtilities'
+" Markdown
+Bundle 'plasticboy/vim-markdown'
 
 " JS stuff
 Bundle 'jelera/vim-javascript-syntax'
 Bundle 'pangloss/vim-javascript'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'elzr/vim-json'
 
 " Syntax stuff + python additions
 Bundle 'scrooloose/syntastic'
 Bundle 'nvie/vim-flake8'
 Bundle 'hynek/vim-python-pep8-indent'
-
-" Better PHP Complete
-Bundle 'shawncplus/phpcomplete.vim'
 
 " Better Go complete
 Bundle 'Blackrush/vim-gocode'
@@ -61,13 +57,7 @@ Bundle 'Blackrush/vim-gocode'
 " Debugging
 Bundle 'joonty/vdebug.git'
 
-" Supertab!
-Bundle 'ervandew/supertab'
-
 filetype plugin indent on
-
-" Prevent a couple of vulnerabilities
-set modelines=0
 
 " Do not need to show the mode on the status line, powerline handles this
 set noshowmode
@@ -84,6 +74,7 @@ set noexpandtab
 " Specific tabstop settings:
 augroup Indentation
 	autocmd!
+	autocmd FileType c setlocal tabstop=4 shiftwidth=4
 	autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 expandtab
 	autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab
 	autocmd FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
@@ -117,9 +108,9 @@ set viminfo='100,h
 set history=100
 
 set wildmode=list:longest,full
-set wildignore+=*/tmp/*,*.so,*.swp,*/vendor/*,*/tests/coverage/*
+set wildignore+=*/tmp/*,*.so,*.swp,*/tests/coverage/*
 let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\v[\/]\.(vendor|tests/coverage)$',
+			\ 'dir':  '\v[\/]\.(tests/coverage)$',
 			\ 'file': '\v\.(png|jpg|swf)$',
 			\ }
 
@@ -135,7 +126,7 @@ set smartcase
 set relativenumber
 
 " Set leader key to ,
-let mapleader = ","
+let mapleader = "\<space>"
 
 " Set 'normal' regex syntax (see :magic)
 nnoremap / /\v
@@ -180,7 +171,7 @@ command! Q q
 
 augroup MakeCoffee
 	autocmd!
-	autocmd BufWritePost *.coffee silent make!
+	"autocmd BufWritePost *.coffee silent make!
 augroup END
 
 " Window management hotkeys
@@ -238,15 +229,8 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 let g:UltiSnipsSnippetsDir = "~/.vim/snippets"
 let g:UltiSnipsSnippetDirectories = ["snippets"]
 
-"SQLUtil keyword case update
-let g:sqlutil_keyword_case = '\U'
-let g:sqlutil_align_where = 0
-
-"phpcomplete awesomeness
-let g:phpcomplete_parse_docblock_comments = 1
-
-"supertab configuration
-let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
+" no more silly json double quote hiding
+let g:vim_json_syntax_conceal = 0
 
 " Set up some sweet powerline features
 let g:airline_left_sep = ''
@@ -260,6 +244,8 @@ let g:airline_symbols.linenr = '␤'
 let g:airline_symbols.branch = '⎇'
 let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.whitespace = 'Ξ'
+
+let g:syntastic_php_phpcs_args = "--tab-width=4 --standard=Barracuda"
 
 let g:vdebug_options = {
 			\ 'break_on_open' : 0,

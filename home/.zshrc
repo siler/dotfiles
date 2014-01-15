@@ -42,5 +42,8 @@ if [ -d $CUDA_PROFILE_DIR ]; then
 	for f in $CUDA_PROFILE_DIR/*; do source $f; done
 fi
 
-setopt no_hist_verify
 
+setopt no_hist_verify
+setopt hist_ignore_space
+bindkey "^R" history-incremental-pattern-search-backward
+bindkey "^S" history-incremental-pattern-search-forward

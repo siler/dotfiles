@@ -7,7 +7,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Util.WorkspaceCompare(getSortByXineramaRule)
 
 -- Layout
-import XMonad.Layout.NoBorders(smartBorders, noBorders)
+import XMonad.Layout.NoBorders(noBorders)
 import XMonad.Layout.LayoutHints(layoutHintsWithPlacement)
 
 -- Hotkeys
@@ -27,7 +27,7 @@ sClrMagenta    = "#ae81ff"
 sClrCyan       = "#a1efe4"
 sClrWhite      = "#f8f8f2"
 
-myLayout = avoidStruts $ (smartBorders hintedTiled ||| noBorders Full)
+myLayout = avoidStruts $ (hintedTiled ||| noBorders Full)
   where
     hintedTiled = layoutHintsWithPlacement (0.5, 0.5) (Tall 1 (3/100) (2/3))
 
@@ -46,7 +46,7 @@ myXmobarPP = defaultPP { ppCurrent = xmobarColor sClrOrange "" . wrap "[" "]"
 main = do
   xmproc <- spawnPipe "/home/siler/.cabal/bin/xmobar /home/siler/.xmonad/xmobar.hs"
   xmonad $ defaultConfig
-    { manageHook = manageDocks <+> manageHook defaultConfig
+    { manageHook = manageDocks <+> myManageHook <+> manageHook defaultConfig
     , layoutHook =  myLayout
     , handleEventHook = docksEventHook
     , logHook = dynamicLogWithPP myXmobarPP { ppOutput = hPutStrLn xmproc }
@@ -61,3 +61,6 @@ main = do
     , ((0, xK_Escape), spawn "slock")
     , ((mod4Mask, xK_c), spawn "google-chrome-beta")
     ]
+
+myManageHook = composeAll
+  [ className =? "openarena" --> doFloat ]

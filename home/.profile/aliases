@@ -1,8 +1,9 @@
 #!/bin/zsh
 
 alias ack-grep='ack'
-alias ls='ls --color=auto'
-alias ll='ls -al'
+alias ls=' ls --color=auto'
+alias ll=' ls -al'
+alias cd=' cd'
 alias diff=colordiff
 
 alias root='cd $(git root)'
