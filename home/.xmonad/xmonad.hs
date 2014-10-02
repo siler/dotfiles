@@ -1,5 +1,9 @@
 import XMonad
 
+-- Screen order
+import qualified Data.Map as M
+import XMonad.Actions.PhysicalScreens
+
 -- Docks
 import XMonad.Hooks.ManageDocks(manageDocks, avoidStruts, docksEventHook)
 import XMonad.Util.Run(spawnPipe)
@@ -13,6 +17,8 @@ import XMonad.Layout.LayoutHints(layoutHintsWithPlacement)
 -- Hotkeys
 import XMonad.Util.EZConfig(additionalKeys)
 
+-- Desktop configuration
+import XMonad.Config.Desktop
 
 import System.IO -- hPutStrLn
 
@@ -45,7 +51,7 @@ myXmobarPP = defaultPP { ppCurrent = xmobarColor sClrOrange "" . wrap "[" "]"
 
 main = do
   xmproc <- spawnPipe "/home/siler/.cabal/bin/xmobar /home/siler/.xmonad/xmobar.hs"
-  xmonad $ defaultConfig
+  xmonad $ desktopConfig
     { manageHook = manageDocks <+> myManageHook <+> manageHook defaultConfig
     , layoutHook =  myLayout
     , handleEventHook = docksEventHook
@@ -55,12 +61,22 @@ main = do
     , borderWidth = myBorderWidth
     , normalBorderColor = sClrMagenta
     , focusedBorderColor = sClrOrange
+    , keys = psKeys <+> keys defaultConfig
     }
     `additionalKeys`
     [ ((mod4Mask, xK_p), spawn "exe=`dmenu_run` && eval \"exec $exe\"")
     , ((0, xK_Escape), spawn "slock")
-    , ((mod4Mask, xK_c), spawn "google-chrome-beta")
+    , ((mod4Mask, xK_c), spawn "google-chrome-stable")
     ]
 
 myManageHook = composeAll
   [ className =? "openarena" --> doFloat ]
+
+--
+-- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
+-- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+--
+psKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
+  [((modm .|. mask, key), f sc)
+      | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+      , (f, mask) <- [(viewScreen, 0), (sendToScreen, shiftMask)]]

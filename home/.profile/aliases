@@ -6,19 +6,10 @@ alias ll=' ls -al'
 alias cd=' cd'
 alias diff=colordiff
 
+alias gst='git status -s'
+
 alias root='cd $(git root)'
 
-alias bbs='ssh support.bbs.cudaops.com'
-alias bsh='ssh support.cudaops.com'
-alias ncs='ssh 10.128.1.8'
-
-alias delta='ssh 10.2.73.78'
-alias gamma='ssh 10.2.73.80'
-
-alias epsilon='ssh epsilon'
-alias zeta='ssh zeta'
-
-alias cuda-sec='sudo $HOME/.profile/bin/mount-cuda; if [ $? -eq 0 ]; then source $HOME/.zshrc; fi'
 alias screen-conf='sudo $HOME/.profile/bin/screen-config'
 
 alias print-colors='for i in {0..255} ; do printf "\x1b[38;5;${i}m ${i}"; done'
@@ -32,3 +23,4 @@ alias gcert='certutil -d sql:$HOME/.pki/nssdb'
 alias homeshick="source $HOME/.homesick/repos/homeshick/bin/homeshick.sh"
 
 alias pdb='XDEBUG_CONFIG="idekey=siler" php -d xdebug.remote_enable=1'
+alias google-chrome="google-chrome-stable"

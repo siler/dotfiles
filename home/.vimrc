@@ -2,11 +2,11 @@
 set nocompatible
 filetype off
 
-set runtimepath+=~/.vim/bundle/vundle/
-call vundle#rc()
+set runtimepath+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
 " Vundle can manage Vundle!
-Bundle 'gmarik/vundle'
+Bundle 'gmarik/Vundle.vim'
 
 " Vundle can install these too:
 Bundle 'tpope/vim-sensible'
@@ -27,12 +27,14 @@ Bundle 'mileszs/ack.vim'
 " Undo tree tool
 Bundle "sjl/gundo.vim"
 
+" need indent guides
+Bundle 'nathanaelkane/vim-indent-guides'
+
 " Excellent tpope stuff
 Bundle 'tpope/vim-eunuch'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-sleuth'
 
 " Tig in vim
 Bundle 'int3/vim-extradite'
@@ -44,6 +46,7 @@ Bundle 'plasticboy/vim-markdown'
 Bundle 'jelera/vim-javascript-syntax'
 Bundle 'pangloss/vim-javascript'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'mintplant/vim-literate-coffeescript'
 Bundle 'elzr/vim-json'
 
 " Syntax stuff + python additions
@@ -54,9 +57,13 @@ Bundle 'hynek/vim-python-pep8-indent'
 " Better Go complete
 Bundle 'Blackrush/vim-gocode'
 
-" Debugging
-Bundle 'joonty/vdebug.git'
+" Scala
+Bundle 'derekwyatt/vim-scala'
 
+" Debugging
+"Bundle 'joonty/vdebug.git'
+
+call vundle#end()
 filetype plugin indent on
 
 " Do not need to show the mode on the status line, powerline handles this
@@ -67,26 +74,46 @@ set showcmd
 
 " general tabstop settings
 set smarttab
-set shiftwidth=3
-set tabstop=3
-set noexpandtab
+set shiftwidth=2
+set softtabstop=2
+set expandtab
 
 " Specific tabstop settings:
 augroup Indentation
 	autocmd!
-	autocmd FileType c setlocal tabstop=4 shiftwidth=4
-	autocmd FileType coffee setlocal shiftwidth=2 softtabstop=2 expandtab
-	autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab
-	autocmd FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
+	autocmd FileType c setlocal textwidth=80
+
 	autocmd FileType python setlocal shiftwidth=4 softtabstop=4 expandtab textwidth=79
+	autocmd FileType rust setlocal shiftwidth=4 softtabstop=4 expandtab
+
+	autocmd FileType mkd setlocal shiftwidth=4 softtabstop=4 expandtab textwidth=80
+	autocmd FileType php setlocal shiftwidth=4 softtabstop=4 expandtab
+	autocmd FileType sql setlocal shiftwidth=3 softtabstop=3 expandtab
+augroup END
+
+augroup Runtime
+	autocmd!
+	autocmd FileType litcoffee runtime ftplugin/coffee.vim
 augroup END
 
 " show whitespace
 set list
 let &listchars = "tab:\u2192\ ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 
+" automatically wrap on text width
+set formatoptions+=t
+
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+augroup IndentationColors
+	autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
+	autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=233
+augroup END
+
 " remove horrible split characters
 set fillchars+=vert:\ 
+
+" 
 
 " keep undo files in a specific location instead of littering code trees
 set undodir=~/.cache/vim
@@ -110,7 +137,7 @@ set history=100
 set wildmode=list:longest,full
 set wildignore+=*/tmp/*,*.so,*.swp,*/tests/coverage/*
 let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\v[\/]\.(tests/coverage)$',
+			\ 'dir':  '\v[\/]\.?(coverage)$',
 			\ 'file': '\v\.(png|jpg|swf)$',
 			\ }
 
@@ -140,19 +167,14 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<cr>
 
 " Search commands
 nnoremap <leader>a :Ack<space>
-nnoremap <leader>g :Ggrep<space>
-nnoremap <leader>fw :call FindWord()<cr>
-nnoremap <leader>ff :call FindFunc()<cr>
 
-function! FindWord()
-	let l:Word = expand("<cword>")
-	execute ":Ggrep ".l:Word
-endfunction
+" Show errors in hit list
+nnoremap <leader>e :Errors<cr>
 
-function! FindFunc()
-	let l:Word = expand("<cword>")
-	execute ":Ggrep 'function ".l:Word."'"
-endfunction
+" Diffing tools
+nnoremap <leader>du :diffupdate<cr>
+nnoremap <leader>gr :diffget //3<cr>
+nnoremap <leader>gl :diffget //2<cr>
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cnoremap W!! w !sudo tee > /dev/null %
@@ -164,6 +186,9 @@ inoremap <C-@> <C-x><C-o>
 nnoremap <silent> <leader>ev :edit $MYVIMRC<cr>
 nnoremap <silent> <leader>sv :source $MYVIMRC<cr>
 nnoremap <silent> <leader>es :UltiSnipsEdit<cr>
+
+" Fugitive
+nnoremap <leader>s :Gst<cr>
 
 " Common command mistakes
 command! W w
@@ -214,7 +239,7 @@ noremap <leader>wc :wincmd q<cr>
 noremap <leader>wr <C-W>r
 
 " Ack default command
-let g:ackprg="ack -H --nocolor --nogroup --column"
+let g:ackprg="ag --nogroup --nocolor --column"
 
 " CtrlP working directory
 let g:ctrlp_working_path_mode="wra"
@@ -224,10 +249,11 @@ nnoremap <leader>f :CtrlPMRUFiles<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
 " Ultisnips configuraiton
+let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-let g:UltiSnipsSnippetsDir = "~/.vim/snippets"
-let g:UltiSnipsSnippetDirectories = ["snippets"]
+let g:UltiSnipsSnippetsDir = "~/.vim/mySnippets"
+let g:UltiSnipsSnippetDirectories = ["mySnippets"]
 
 " no more silly json double quote hiding
 let g:vim_json_syntax_conceal = 0
@@ -245,11 +271,15 @@ let g:airline_symbols.branch = '⎇'
 let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.whitespace = 'Ξ'
 
-let g:syntastic_php_phpcs_args = "--tab-width=4 --standard=Barracuda"
+let g:DisableAutoPHPFolding = 1
+
+let g:vim_markdown_folding_disabled = 1
 
 let g:vdebug_options = {
 			\ 'break_on_open' : 0,
 			\ 'continuous_mode' : 1
 			\}
+
+let g:scala_use_default_keymappings = 0
 
 set completeopt+=longest

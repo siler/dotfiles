@@ -4,6 +4,7 @@ Config { font = "xft:Inconsolata:pixelsize=13:antialias=true:autohint=false"
        , position = Top
        , lowerOnStart = True
        , commands = [ Run Memory ["-t", "<usedratio>% (<used>M)"] 100
+                    , Run Wireless "wlan0" [] 100
                     , Run BatteryP ["BAT1"]
                                    [ "-t", "<acstatus>"
                                    , "--"
@@ -13,15 +14,11 @@ Config { font = "xft:Inconsolata:pixelsize=13:antialias=true:autohint=false"
                                    , "-f", "ACAD/online"
                                    ]
                                    100
-                    , Run Com "cut" ["-d", "' '"
-                                    , "-f", "1", "/proc/loadavg"
-                                    ]
-                                    "loadavg" 100
-                    , Run Com "date" ["+'%m/%d %H:%M'"] "datetime" 600
+                    , Run Com "date" ["+%m/%d %H:%M"] "datetime" 600
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
        , allDesktops = True
-       , template = " %StdinReader% }{ %loadavg% : %memory% : %battery% : %datetime% "
+       , template = " %StdinReader% }{ %wlan0wi% : %memory% : %battery% : %datetime% "
        }

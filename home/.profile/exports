@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-export MYSQL_PS1="\u@\h in <\d> : "
-#export LSCOLORS="Exfxcxdxbxegedabagacad"
-export CHROME_BIN="google-chrome-beta"
+export GOPATH=$HOME/code/go
 export XDG_CONFIG_HOME="$HOME/.config"
+export CHROME_BIN="google-chrome-stable"
+export BROWSER="google-chrome-stable"
+
+# SBT
+SBT_HOME="$HOME/.sbt"
